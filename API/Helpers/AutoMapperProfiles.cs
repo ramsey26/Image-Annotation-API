@@ -12,10 +12,14 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<AppUser, MemberDto>();
+            CreateMap<AppUser, MemberDto>()
+                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos.Where(x => x.IsActive == true)));
             CreateMap<MemberDto, AppUser>();
             CreateMap<Photo, PhotoDto>();
             CreateMap<PhotoDto, Photo>();
+            CreateMap<BoundingBox, BoundingBoxDto>();
+            CreateMap<BoundingBoxDto, BoundingBox>();
+            CreateMap<IEnumerable<BoundingBoxDto>, MemberDto>();
         }
     }
 }

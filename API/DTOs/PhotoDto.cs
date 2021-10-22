@@ -1,4 +1,6 @@
-﻿namespace API.DTOs
+﻿using System.Collections.Generic;
+
+namespace API.DTOs
 {
     public class PhotoDto
     {
@@ -6,5 +8,6 @@
         public string FileName { get; set; }
         public string FileContentType { get; set; }
         public string FileContent { get; set; }
+      //  public ICollection<BoundingBoxDto> BoundingBoxes { get; set; }
     }
 }

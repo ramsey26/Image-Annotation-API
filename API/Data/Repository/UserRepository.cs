@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -24,8 +25,8 @@ namespace API.Data.Repository
 
         public async Task<MemberDto> GetMemberAsync(string username)
         {
-            return await _dataContext.Users
-                .Where(x => x.UserName == username)
+             return await _dataContext.Users
+                .Where(x => x.UserName == username && x.IsActive==true)
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -33,6 +34,7 @@ namespace API.Data.Repository
         public async Task<IEnumerable<MemberDto>> GetMembersAsync()
         {
             return await _dataContext.Users
+                    .Where(x => x.IsActive == true)
                     .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
         }

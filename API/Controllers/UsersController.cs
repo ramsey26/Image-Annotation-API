@@ -1,6 +1,8 @@
 ﻿using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -18,11 +20,13 @@ namespace API.Controllers
     public class UsersController : BaseApiController
     {
        private readonly IUserRepository _userRepository;
+        private readonly IBoundingBoxRepository _boundingBoxRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UsersController(IUserRepository userRepository, IMapper mapper, IBoundingBoxRepository boundingBoxRepository)
         {
             _userRepository = userRepository;
+            _boundingBoxRepository = boundingBoxRepository;
             _mapper = mapper;
         }
 
@@ -37,15 +41,14 @@ namespace API.Controllers
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            return await _userRepository.GetMemberAsync(username);
+          return await _userRepository.GetMemberAsync(username);
+          
         }
 
-        [HttpPost("uploadPhotoData")]
+        [HttpPost("upload-photo")]
         public async Task<ActionResult> UploadPhotoData(PhotoDto photoDto)
         {
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             Photo photo = new Photo();
 
@@ -57,5 +60,16 @@ namespace API.Controllers
 
             return BadRequest("Failed to upload photo.");
         }
+
+        [HttpGet("getLastPhoto")]
+        public async Task<ActionResult<Photo>> GetLastPhotoData()
+        {
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+
+            var lastPhoto = user.Photos.TakeLast<Photo>(1);
+
+            return Ok(lastPhoto.FirstOrDefault());
+        }
+
     }
 }
