@@ -33,6 +33,11 @@ namespace API.Data.Repository
             Update(boundingBox);
         }
 
+        public void Update(BoundingBox boundingBox)
+        {
+            _dataContext.Entry(boundingBox).State = EntityState.Modified;
+        }
+
         public async Task<IEnumerable<BoundingBoxDto>> GetBoxByPhotoId(int photoId)
         {
             return await _dataContext.BoundingBoxes.Where(x => x.PhotoId == photoId && x.IsActive==true)
@@ -45,9 +50,6 @@ namespace API.Data.Repository
             return await _dataContext.SaveChangesAsync() > 0;
         }
 
-        public void Update(BoundingBox boundingBox)
-        {
-            _dataContext.Entry(boundingBox).State = EntityState.Modified;
-        }
+      
     }
 }
