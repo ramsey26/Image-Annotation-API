@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,7 @@ namespace API.Controllers
     [Authorize]
     public class BoundingBoxController : BaseApiController
     {
-        const string boxActionAdd = "A";
-        const string boxActionEdit = "E";
-        const string boxActionDelete = "D";
-
+        
         private readonly IBoundingBoxRepository _boundingBoxRepository;
         private readonly IMapper _mapper;
 
@@ -49,20 +47,20 @@ namespace API.Controllers
         public async Task<ActionResult> SaveBoxByAction([FromBody]List<BoundingBoxDto> boundingBoxDtos)
         {
           
-            foreach (var box in boundingBoxDtos)
+            foreach (var boxDto in boundingBoxDtos)
             {
                 BoundingBox boundingBox = new BoundingBox();
-                _mapper.Map(box, boundingBox);
+                _mapper.Map(boxDto, boundingBox);
              
-                switch (box.Action)
+                switch (boxDto.Action)
                 {
-                    case boxActionAdd:
+                    case ActionConstants.actionAdd:
                         _boundingBoxRepository.Add(boundingBox);
                         break;
-                    case boxActionEdit:
+                    case ActionConstants.actionEdit:
                         _boundingBoxRepository.Update(boundingBox);
                         break;
-                    case boxActionDelete:
+                    case ActionConstants.actionDelete:
                         _boundingBoxRepository.Delete(boundingBox);
                         break;
                 }

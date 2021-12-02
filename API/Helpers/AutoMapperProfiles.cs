@@ -20,6 +20,10 @@ namespace API.Helpers
             CreateMap<BoundingBox, BoundingBoxDto>();
             CreateMap<BoundingBoxDto, BoundingBox>();
             CreateMap<IEnumerable<BoundingBoxDto>, MemberDto>();
+            CreateMap<Polygon, PolygonDto>();
+            CreateMap<PolygonDto, Polygon>();
+            CreateMap<LineSegment, LineSegmentDto>();
+            CreateMap<LineSegmentDto, LineSegment>();
         }
     }
 }

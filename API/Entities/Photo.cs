@@ -19,5 +19,6 @@ namespace API.Entities
         public bool IsActive { get; set; } = true;
         public DateTime DateCreated { get; set; }
         public ICollection<BoundingBox> BoundingBoxes { get; set; }
+        public ICollection<Polygon> Polygons { get; set; }
     } 
 }
