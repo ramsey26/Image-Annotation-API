@@ -13,7 +13,12 @@ namespace API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<AppUser, MemberDto>()
+                .ForMember(dest => dest.UserProjects, opt => opt.MapFrom(src => src.UserProjects.Where(x => x.IsActive == true)));
+            CreateMap<UserProject, UserProjectWithPhotosDto>()
                 .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos.Where(x => x.IsActive == true)));
+            CreateMap<UserProjectDto, UserProject>();
+            CreateMap<UserProject, UserProjectDto>();
+            CreateMap<AddUserProjectDto, UserProject>();
             CreateMap<MemberDto, AppUser>();
             CreateMap<Photo, PhotoDto>();
             CreateMap<PhotoDto, Photo>();

@@ -15,7 +15,7 @@ namespace API.Entities
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<Photo> Photos { get; set; }
+        public ICollection<UserProject> UserProjects { get; set; }
 
     }
 }

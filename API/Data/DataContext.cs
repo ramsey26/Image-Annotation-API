@@ -13,6 +13,7 @@ namespace API.Data
         {
         }
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<UserProject> UserProjects { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<BoundingBox> BoundingBoxes { get; set; }
         public DbSet<Polygon> Polygons { get; set; }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
 
 namespace API.Controllers
 {
@@ -20,13 +21,11 @@ namespace API.Controllers
     public class UsersController : BaseApiController
     {
        private readonly IUserRepository _userRepository;
-        private readonly IBoundingBoxRepository _boundingBoxRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, IBoundingBoxRepository boundingBoxRepository)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
-            _boundingBoxRepository = boundingBoxRepository;
             _mapper = mapper;
         }
 
@@ -45,31 +44,29 @@ namespace API.Controllers
           
         }
 
-        [HttpPost("upload-photo")]
-        public async Task<ActionResult> UploadPhotoData(PhotoDto photoDto)
-        {
-            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+        //[HttpPost("upload-photo/{projectId}")]
+        //public async Task<ActionResult> UploadPhotoData(int projectId,[FromBody]PhotoDto photoDto)
+        //{   
 
-            Photo photo = new Photo();
+        //    Photo photo = _mapper.Map<Photo>(photoDto);
+        //    photo.UserProjectId = projectId;
+            
+            
+           
+        //    if (await _userRepository.SaveAllAsync()) return Ok();
 
-            _mapper.Map(photoDto, photo);
+        //    return BadRequest("Failed to upload photo.");
+        //}
 
-            user.Photos.Add(photo);
+        //[HttpGet("getLastPhoto/{projectId}")]
+        //public async Task<ActionResult<Photo>> GetLastPhotoData(int projectId)
+        //{
+        //    var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
-            if (await _userRepository.SaveAllAsync()) return Ok();
+        //    var lastPhoto = user.UserProjects.SingleOrDefault(x => x.Id == projectId).Photos.TakeLast<Photo>(1);
 
-            return BadRequest("Failed to upload photo.");
-        }
-
-        [HttpGet("getLastPhoto")]
-        public async Task<ActionResult<Photo>> GetLastPhotoData()
-        {
-            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
-
-            var lastPhoto = user.Photos.TakeLast<Photo>(1);
-
-            return Ok(lastPhoto.FirstOrDefault());
-        }
+        //    return Ok(lastPhoto.FirstOrDefault());
+        //}
 
     }
 }

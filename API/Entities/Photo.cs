@@ -20,5 +20,8 @@ namespace API.Entities
         public DateTime DateCreated { get; set; }
         public ICollection<BoundingBox> BoundingBoxes { get; set; }
         public ICollection<Polygon> Polygons { get; set; }
+
+        [ForeignKey("UserProjects")]
+        public int UserProjectId { get; set; }
     } 
 }

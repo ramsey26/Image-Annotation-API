@@ -47,14 +47,14 @@ namespace API.Data.Repository
         public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
             return await _dataContext.Users
-                .Include(x=>x.Photos)
+                .Include(x=>x.UserProjects)
                 .SingleOrDefaultAsync(x => x.UserName == username);
         }
 
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _dataContext.Users
-                .Include(x => x.Photos)
+                .Include(x => x.UserProjects)
                 .ToListAsync();
         }
 
