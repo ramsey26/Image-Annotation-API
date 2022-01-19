@@ -12,5 +12,6 @@ namespace API.DTOs
         public string Description { get; set; }
         public DateTime DateCreated { get; set; }
         public ICollection<PhotoDto> Photos { get; set; }
+        public ICollection<LabelDto> Labels { get; set; }
     }
 }

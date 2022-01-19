@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -33,9 +34,9 @@ namespace API.Data.Repository
 
         public void Delete(Polygon polygon)
         {
-            //polygon.IsActive = false;
-            //Update(polygon);
-            _dataContext.Polygons.Remove(polygon);
+            polygon.IsActive = false;
+            Update(polygon);
+            // _dataContext.Polygons.Remove(polygon);
         }
 
         public async Task<IEnumerable<PolygonDto>> GetPolygonsByPhotoId(int photoId)
@@ -52,8 +53,13 @@ namespace API.Data.Repository
 
         public async Task<Polygon> GetPolygonById(int id)
         {
-            return await _dataContext.Polygons.Where(x => x.IsActive == true && x.Id == id)
-                .Include(x=>x.LineSegments).FirstOrDefaultAsync();
+            return await _dataContext.Polygons.Where(x => x.Id == id && x.IsActive == true)
+                .Include(x => x.LineSegments).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Polygon>> GetPolygonsByLabelId(int labelId)
+        {
+            return await _dataContext.Polygons.Where(x => x.LabelId == labelId && x.IsActive == true).ToListAsync();
         }
     }
 }

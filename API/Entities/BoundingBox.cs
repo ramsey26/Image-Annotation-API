@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 namespace API.Entities
 {
     [Table("BoundingBox")]
-    public class BoundingBox
-    {
-        public BoundingBox()
-        {
-            this.DateCreated = Convert.ToDateTime(DateTime.Now.ToString("dd-MMM-yyyy H:mm:ss"));
-        }
-
+    public class BoundingBox : BaseEntity
+    { 
         public int? Id { get; set; }
         public decimal X1 { get; set; }
         public decimal Y1 { get; set; }
@@ -22,7 +17,7 @@ namespace API.Entities
         public double Angle { get; set; }
         public int BoundingBoxNumber { get; set; }
         public bool IsActive { get; set; } = true;
-        public DateTime DateCreated { get; set; }
+        public int? LabelId { get; set; }
 
         [ForeignKey("Photos")]
         public int PhotoId { get; set; }

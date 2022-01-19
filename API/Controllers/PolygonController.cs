@@ -31,13 +31,17 @@ namespace API.Controllers
                
                 switch (polygonDto.Action)
                 {
-                    case ActionConstants.actionAdd:
+                    case EntityHelpers.actionAdd:
                         _mapper.Map(polygonDto, polygon);
                         _polygonRepository.Add(polygon);
                         break;
-                    case ActionConstants.actionDelete:
+                    case EntityHelpers.actionEdit:
+                        _mapper.Map(polygonDto, polygon);
+                         _polygonRepository.Update(polygon);
+                        break;
+                    case EntityHelpers.actionDelete:
                         polygon = await _polygonRepository.GetPolygonById((int)polygonDto.Id);
-                        _polygonRepository.Delete(polygon);
+                         _polygonRepository.Delete(polygon);
                         break;
                 }
             }

@@ -54,14 +54,14 @@ namespace API.Controllers
              
                 switch (boxDto.Action)
                 {
-                    case ActionConstants.actionAdd:
+                    case EntityHelpers.actionAdd:
                         _boundingBoxRepository.Add(boundingBox);
                         break;
-                    case ActionConstants.actionEdit:
+                    case EntityHelpers.actionEdit:
                         _boundingBoxRepository.Update(boundingBox);
                         break;
-                    case ActionConstants.actionDelete:
-                        _boundingBoxRepository.Delete(boundingBox);
+                    case EntityHelpers.actionDelete:
+                         _boundingBoxRepository.Delete(boundingBox);
                         break;
                 }
             }

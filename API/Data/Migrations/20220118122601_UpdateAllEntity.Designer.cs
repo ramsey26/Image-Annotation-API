@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211213101641_EnitityUpdated")]
-    partial class EnitityUpdated
+    [Migration("20220118122601_UpdateAllEntity")]
+    partial class UpdateAllEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,8 +67,14 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("LabelId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PhotoId")
                         .HasColumnType("int");
@@ -92,6 +98,38 @@ namespace API.Data.Migrations
                     b.ToTable("BoundingBox");
                 });
 
+            modelBuilder.Entity("API.Entities.Label", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LabelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserProjectId");
+
+                    b.ToTable("Labels");
+                });
+
             modelBuilder.Entity("API.Entities.LineSegment", b =>
                 {
                     b.Property<int?>("Id")
@@ -100,6 +138,9 @@ namespace API.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("PolygonId")
@@ -137,6 +178,9 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FileContent")
                         .HasColumnType("nvarchar(max)");
 
@@ -169,6 +213,9 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("EndX")
                         .HasColumnType("decimal(18,2)");
 
@@ -177,6 +224,9 @@ namespace API.Data.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("LabelId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PhotoId")
                         .HasColumnType("int");
@@ -207,9 +257,6 @@ namespace API.Data.Migrations
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -232,6 +279,15 @@ namespace API.Data.Migrations
                     b.HasOne("API.Entities.Photo", null)
                         .WithMany("BoundingBoxes")
                         .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Entities.Label", b =>
+                {
+                    b.HasOne("API.Entities.UserProject", null)
+                        .WithMany("Labels")
+                        .HasForeignKey("UserProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -291,6 +347,8 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.UserProject", b =>
                 {
+                    b.Navigation("Labels");
+
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

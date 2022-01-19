@@ -14,6 +14,7 @@ namespace API.Interfaces
         void Update(Polygon polygon);
         void Delete(Polygon polygon);
         Task<IEnumerable<PolygonDto>> GetPolygonsByPhotoId(int photoId);
+        Task<IEnumerable<Polygon>> GetPolygonsByLabelId(int labelId);
         Task<bool> SaveAllAsync();
     }
 }

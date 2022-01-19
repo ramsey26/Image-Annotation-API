@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -24,17 +25,22 @@ namespace API.Data.Repository
 
         public void Add(BoundingBox boundingBox)
         {
+            //boundingBox.DateCreated = EntityHelpers.GetCurrentDate();
+            //boundingBox.DateModified = EntityHelpers.GetCurrentDate();
+
             _dataContext.BoundingBoxes.Add(boundingBox);
         }
 
         public void Delete(BoundingBox boundingBox)
         {
+            //boundingBox.DateModified = EntityHelpers.GetCurrentDate();
             boundingBox.IsActive = false;
             Update(boundingBox);
         }
 
         public void Update(BoundingBox boundingBox)
         {
+           // boundingBox.DateModified = EntityHelpers.GetCurrentDate();
             _dataContext.Entry(boundingBox).State = EntityState.Modified;
         }
 
@@ -47,9 +53,12 @@ namespace API.Data.Repository
 
         public async Task<bool> SaveAllAsync()
         {
-            return await _dataContext.SaveChangesAsync() > 0;
+            return await _dataContext.SaveChangesAsync(true,default) > 0;
         }
 
-      
+        public async Task<IEnumerable<BoundingBox>> GetBoxByLabelId(int labelId)
+        {
+            return await _dataContext.BoundingBoxes.Where(x => x.LabelId == labelId && x.IsActive == true).ToListAsync();
+        }
     }
 }

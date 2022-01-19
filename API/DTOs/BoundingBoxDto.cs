@@ -16,5 +16,6 @@ namespace API.DTOs
         public int BoundingBoxNumber { get; set; }
         public int PhotoId { get; set; }
         public string Action { get; set; }
+        public int? LabelId { get; set; }
     }
 }

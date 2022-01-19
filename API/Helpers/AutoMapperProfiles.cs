@@ -15,7 +15,8 @@ namespace API.Helpers
             CreateMap<AppUser, MemberDto>()
                 .ForMember(dest => dest.UserProjects, opt => opt.MapFrom(src => src.UserProjects.Where(x => x.IsActive == true)));
             CreateMap<UserProject, UserProjectWithPhotosDto>()
-                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos.Where(x => x.IsActive == true)));
+                .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos.Where(x => x.IsActive == true)))
+                .ForMember(dest => dest.Labels, opt => opt.MapFrom(src => src.Labels.Where(x => x.IsActive == true)));
             CreateMap<UserProjectDto, UserProject>();
             CreateMap<UserProject, UserProjectDto>();
             CreateMap<AddUserProjectDto, UserProject>();
@@ -29,6 +30,8 @@ namespace API.Helpers
             CreateMap<PolygonDto, Polygon>();
             CreateMap<LineSegment, LineSegmentDto>();
             CreateMap<LineSegmentDto, LineSegment>();
+            CreateMap<Label, LabelDto>();
+            CreateMap<LabelDto, Label>();
         }
     }
 }

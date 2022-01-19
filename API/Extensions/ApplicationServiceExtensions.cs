@@ -19,6 +19,7 @@ namespace API.Extensions
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IBoundingBoxRepository, BoundingBoxRepository>();
             services.AddScoped<IPolygonRepository, PolygonRepository>();
+            services.AddScoped<ILabelsRepository, LabelsRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>
             {
