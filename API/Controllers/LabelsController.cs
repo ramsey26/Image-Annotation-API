@@ -15,17 +15,12 @@ namespace API.Controllers
     [Authorize]
     public class LabelsController : BaseApiController
     {
-        private readonly ILabelsRepository _labelsRepository;
-        private readonly IBoundingBoxRepository _boundingBoxRepository;
-        private readonly IPolygonRepository _polygonRepository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMapper _mapper;
 
-        public LabelsController(ILabelsRepository labelsRepository, IBoundingBoxRepository boundingBoxRepository,
-            IPolygonRepository polygonRepository, IMapper mapper)
+        public LabelsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _labelsRepository = labelsRepository;
-            _boundingBoxRepository = boundingBoxRepository;
-            _polygonRepository = polygonRepository;
+            this.unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -34,8 +29,8 @@ namespace API.Controllers
         {
             Label label = _mapper.Map<LabelDto, Label>(labelDto);
             
-            _labelsRepository.Add(label);
-            if (await _labelsRepository.SaveAllAsync()) return Ok();
+            this.unitOfWork.LabelsRepository.Add(label);
+            if (await this.unitOfWork.Complete()) return Ok();
             return BadRequest("Failed to save label");
         }
 
@@ -45,8 +40,8 @@ namespace API.Controllers
         {
             Label label = _mapper.Map<LabelDto, Label>(labelDto);
 
-            _labelsRepository.Update(label);
-            if (await _labelsRepository.SaveAllAsync()) return Ok();
+            this.unitOfWork.LabelsRepository.Update(label);
+            if (await this.unitOfWork.Complete()) return Ok();
             return BadRequest("Failed to update label");
         }
 
@@ -55,31 +50,31 @@ namespace API.Controllers
         {
             Label label = _mapper.Map<LabelDto, Label>(labelDto);
 
-            _labelsRepository.Delete(label);
+            this.unitOfWork.LabelsRepository.Delete(label);
 
             //Also update Boundingboxes and Polygons if they contain deleted LabelId
-            var listBoundingBox = await _boundingBoxRepository.GetBoxByLabelId(label.Id);
+            var listBoundingBox = await this.unitOfWork.BoundingBoxRepository.GetBoxByLabelId(label.Id);
             foreach (var box in listBoundingBox)
             {
-                _boundingBoxRepository.Delete(box);
+                this.unitOfWork.BoundingBoxRepository.Delete(box);
             }
 
-            var listPolygon = await _polygonRepository.GetPolygonsByLabelId(label.Id);
+            var listPolygon = await this.unitOfWork.PolygonRepository.GetPolygonsByLabelId(label.Id);
             foreach (var polygon in listPolygon)
             {
-                _polygonRepository.Delete(polygon);
+                this.unitOfWork.PolygonRepository.Delete(polygon);
             }
             //await _boundingBoxRepository.SaveAllAsync();
             //await _polygonRepository.SaveAllAsync();
 
-            if (await _labelsRepository.SaveAllAsync()) return Ok();
+            if (await this.unitOfWork.Complete()) return Ok();
             return BadRequest("Failed to delete label");
         }
 
         [HttpGet("{userProjectId}")]
         public async Task<IEnumerable<LabelDto>> GetLabelsByUserProjectId(int userProjectId)
         {
-            return await _labelsRepository.GetLabelByUserProjectId(userProjectId);
+            return await this.unitOfWork.LabelsRepository.GetLabelByUserProjectId(userProjectId);
         }
     }
 }

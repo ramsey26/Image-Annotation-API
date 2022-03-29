@@ -16,12 +16,12 @@ namespace API.Controllers
     public class BoundingBoxController : BaseApiController
     {
         
-        private readonly IBoundingBoxRepository _boundingBoxRepository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMapper _mapper;
 
-        public BoundingBoxController(IBoundingBoxRepository boundingBoxRepository, IMapper mapper)
+        public BoundingBoxController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _boundingBoxRepository = boundingBoxRepository;
+            this.unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -35,11 +35,11 @@ namespace API.Controllers
             {
                 if (box.Id == null)
                 {
-                    _boundingBoxRepository.Add(box);
+                    this.unitOfWork.BoundingBoxRepository.Add(box);
                 }
             }
            
-            if (await _boundingBoxRepository.SaveAllAsync()) return Ok();
+            if (await this.unitOfWork.Complete()) return Ok();
             return BadRequest("Failed to add bounding box");
         }
 
@@ -55,25 +55,25 @@ namespace API.Controllers
                 switch (boxDto.Action)
                 {
                     case EntityHelpers.actionAdd:
-                        _boundingBoxRepository.Add(boundingBox);
+                        this.unitOfWork.BoundingBoxRepository.Add(boundingBox);
                         break;
                     case EntityHelpers.actionEdit:
-                        _boundingBoxRepository.Update(boundingBox);
+                        this.unitOfWork.BoundingBoxRepository.Update(boundingBox);
                         break;
                     case EntityHelpers.actionDelete:
-                         _boundingBoxRepository.Delete(boundingBox);
+                        this.unitOfWork.BoundingBoxRepository.Delete(boundingBox);
                         break;
                 }
             }
 
-            if (await _boundingBoxRepository.SaveAllAsync()) return Ok();
+            if (await this.unitOfWork.Complete()) return Ok();
             return BadRequest("Failed to save bounding boxes");
         }
 
         [HttpGet("{photoId}")]
         public async Task<IEnumerable<BoundingBoxDto>> GetBoxByPhotoId(int photoId)
         {
-            return await _boundingBoxRepository.GetBoxByPhotoId(photoId);
+            return await this.unitOfWork.BoundingBoxRepository.GetBoxByPhotoId(photoId);
         }
 
     }

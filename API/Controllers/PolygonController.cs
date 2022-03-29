@@ -13,12 +13,12 @@ namespace API.Controllers
 {
     public class PolygonController : BaseApiController
     {
-        private readonly IPolygonRepository _polygonRepository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMapper _mapper;
 
-        public PolygonController(IPolygonRepository polygonRepository, IMapper mapper )
+        public PolygonController(IUnitOfWork unitOfWork, IMapper mapper )
         {
-            _polygonRepository = polygonRepository;
+            this.unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -33,20 +33,20 @@ namespace API.Controllers
                 {
                     case EntityHelpers.actionAdd:
                         _mapper.Map(polygonDto, polygon);
-                        _polygonRepository.Add(polygon);
+                        this.unitOfWork.PolygonRepository.Add(polygon);
                         break;
                     case EntityHelpers.actionEdit:
                         _mapper.Map(polygonDto, polygon);
-                         _polygonRepository.Update(polygon);
+                        this.unitOfWork.PolygonRepository.Update(polygon);
                         break;
                     case EntityHelpers.actionDelete:
-                        polygon = await _polygonRepository.GetPolygonById((int)polygonDto.Id);
-                         _polygonRepository.Delete(polygon);
+                        polygon = await this.unitOfWork.PolygonRepository.GetPolygonById((int)polygonDto.Id);
+                        this.unitOfWork.PolygonRepository.Delete(polygon);
                         break;
                 }
             }
 
-            if (await _polygonRepository.SaveAllAsync()) return Ok();
+            if (await this.unitOfWork.Complete()) return Ok();
 
             return BadRequest("Failed to save polygons");
         }
@@ -54,7 +54,7 @@ namespace API.Controllers
         [HttpGet("{photoId}")]
         public async Task<IEnumerable<PolygonDto>> GetPolygonsByPhotoId(int photoId)
         {
-            return await _polygonRepository.GetPolygonsByPhotoId(photoId);
+            return await this.unitOfWork.PolygonRepository.GetPolygonsByPhotoId(photoId);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace API.Entities
         public bool IsActive { get; set; } = true;
         public ICollection<Photo> Photos { get; set; }
         public ICollection<Label> Labels { get; set; }
+        public bool IsCompleted { get; set; } = false;
 
         [ForeignKey("User")]
         public int AppUserId { get; set; }

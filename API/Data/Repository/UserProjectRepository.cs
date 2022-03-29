@@ -27,6 +27,11 @@ namespace API.Data.Repository
             _dataContext.UserProjects.Add(userProject);
         }
 
+        public void UpdateUserProject(UserProject userProject)
+        {
+            _dataContext.Entry(userProject).State = EntityState.Modified;
+        }
+
         public async Task<UserProjectWithPhotosDto> GetUserProjectByNameAsync(int userId, string projectName)
         {
             return await _dataContext.UserProjects
@@ -43,9 +48,9 @@ namespace API.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<bool> SaveAllAsync()
+        public async Task<UserProject> GetUserProjectByIdAsync(int id)
         {
-            return await _dataContext.SaveChangesAsync() > 0;
+            return await _dataContext.UserProjects.SingleOrDefaultAsync(x => x.Id == id && x.IsActive == true);
         }
     }
 }

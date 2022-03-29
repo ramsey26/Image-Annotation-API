@@ -10,8 +10,9 @@ namespace API.Interfaces
     public interface IUserProjectRepository
     {
         void AddUserProject(UserProject userProject);
+        void UpdateUserProject(UserProject userProject);
+        Task<UserProject> GetUserProjectByIdAsync(int id);
         Task<UserProjectWithPhotosDto> GetUserProjectByNameAsync(int userId, string projectName);
         Task<IEnumerable<UserProjectWithPhotosDto>> GetUserProjectsAsync(int userId);
-        Task<bool> SaveAllAsync();
     }
 }

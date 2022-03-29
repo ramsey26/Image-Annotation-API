@@ -14,12 +14,12 @@ namespace API.Controllers
     [Authorize]
     public class PhotoController : BaseApiController
     {
-        private readonly IPhotoRepository _photoRepository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMapper _mapper;
 
-        public PhotoController(IPhotoRepository photoRepository,IMapper mapper)
+        public PhotoController(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            _photoRepository = photoRepository;
+            this.unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -29,9 +29,9 @@ namespace API.Controllers
             Photo photo = _mapper.Map<Photo>(photoDto);
             photo.UserProjectId = projectId;
 
-            _photoRepository.AddPhoto(photo);
+            this.unitOfWork.PhotoRepository.AddPhoto(photo);
 
-            if (await _photoRepository.SaveAllAsync()) return Ok();
+            if (await this.unitOfWork.Complete()) return Ok();
 
             return BadRequest("Failed to upload photo.");
         }
@@ -39,7 +39,7 @@ namespace API.Controllers
         [HttpGet("getLastPhoto/{projectId}")]
         public async Task<ActionResult<Photo>> GetLastPhotoData(int projectId)
         {
-            var lastPhoto = await _photoRepository.GetLastPhotoAsync(projectId);
+            var lastPhoto = await this.unitOfWork.PhotoRepository.GetLastPhotoAsync(projectId);
 
             return Ok(lastPhoto);
         }

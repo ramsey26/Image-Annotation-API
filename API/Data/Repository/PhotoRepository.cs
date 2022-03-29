@@ -31,10 +31,5 @@ namespace API.Data.Repository
             var lastPhoto = userProject.Photos.TakeLast<Photo>(1).FirstOrDefault();
             return lastPhoto;
         }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _dataContext.SaveChangesAsync() > 0;
-        }
     }
 }

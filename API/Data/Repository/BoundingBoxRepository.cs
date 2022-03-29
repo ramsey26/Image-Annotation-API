@@ -51,11 +51,6 @@ namespace API.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _dataContext.SaveChangesAsync(true,default) > 0;
-        }
-
         public async Task<IEnumerable<BoundingBox>> GetBoxByLabelId(int labelId)
         {
             return await _dataContext.BoundingBoxes.Where(x => x.LabelId == labelId && x.IsActive == true).ToListAsync();

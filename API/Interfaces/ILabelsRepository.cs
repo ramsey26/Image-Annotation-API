@@ -17,6 +17,6 @@ namespace API.Interfaces
 
         Task<IEnumerable<LabelDto>> GetLabelByUserProjectId(int userProjectId);
 
-        Task<bool> SaveAllAsync();
+      
     }
 }

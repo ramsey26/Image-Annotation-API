@@ -10,6 +10,5 @@ namespace API.Interfaces
     {
         void AddPhoto(Photo photo);
         Task<Photo> GetLastPhotoAsync(int projectId);
-        Task<bool> SaveAllAsync();
     } 
 }

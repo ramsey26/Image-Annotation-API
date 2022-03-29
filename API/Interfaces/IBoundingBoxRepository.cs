@@ -18,7 +18,6 @@ namespace API.Interfaces
         Task<IEnumerable<BoundingBoxDto>> GetBoxByPhotoId(int photoId);
 
         Task<IEnumerable<BoundingBox>> GetBoxByLabelId(int labelId); 
-        Task<bool> SaveAllAsync();
-
+      
     }
 }

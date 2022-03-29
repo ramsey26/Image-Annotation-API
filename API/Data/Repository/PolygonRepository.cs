@@ -46,11 +46,6 @@ namespace API.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _dataContext.SaveChangesAsync() > 0;
-        }
-
         public async Task<Polygon> GetPolygonById(int id)
         {
             return await _dataContext.Polygons.Where(x => x.Id == id && x.IsActive == true)

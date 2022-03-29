@@ -11,8 +11,6 @@ namespace API.Interfaces
     {
         void Update(AppUser appUser);
 
-        Task<bool> SaveAllAsync();
-
         Task<IEnumerable<AppUser>> GetUsersAsync();
 
         Task<AppUser> GetUserByIdAsync(int id);
